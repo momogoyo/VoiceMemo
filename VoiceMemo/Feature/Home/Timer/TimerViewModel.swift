@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class TimerViewModel: ObservableObject {
   @Published var isDisplaySetTimeView: Bool
@@ -13,19 +14,22 @@ class TimerViewModel: ObservableObject {
   @Published var timer: Timer?
   @Published var timeRemaining: Int
   @Published var isPaused: Bool
+  @Published var notificationService: NotificationService
   
   init(
     isDisplaySetTimeView: Bool = true,
     time: Time = .init(hours: 0, minutes: 0, seconds: 0),
     timer: Timer? = nil,
     timeRemaining: Int = 0,
-    isPaused: Bool = false
+    isPaused: Bool = false,
+    notificationService: NotificationService = .init()
   ) {
     self.isDisplaySetTimeView = isDisplaySetTimeView
     self.time = time
     self.timer = timer
     self.timeRemaining = timeRemaining
     self.isPaused = isPaused
+    self.notificationService = notificationService
   }
 }
 
@@ -62,6 +66,15 @@ private extension TimerViewModel {
   func startTimer() {
     guard timer == nil else { return }
     
+    var backgroundTaskID: UIBackgroundTaskIdentifier?
+    /// beginBackgroundTask: 앱이 백그라운드 모드로 들어갔을 때 남은 작업을 처리할 시간을 주는 것
+    backgroundTaskID = UIApplication.shared.beginBackgroundTask {
+      if let task = backgroundTaskID {
+        UIApplication.shared.endBackgroundTask(task)
+        backgroundTaskID = .invalid
+      }
+    }
+    
     timer = Timer.scheduledTimer(
       withTimeInterval: 1, /// 1초를 기준으로 타이머 설정
       repeats: true
@@ -72,6 +85,12 @@ private extension TimerViewModel {
       } else {
         /// 타이머 정지
         self.stopTimer()
+        self.notificationService.sendNotification()
+        
+        if let task = backgroundTaskID {
+          UIApplication.shared.endBackgroundTask(task)
+          backgroundTaskID = .invalid
+        }
       }
     }
   }

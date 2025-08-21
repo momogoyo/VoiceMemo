@@ -22,8 +22,9 @@ struct OnboardingView: View {
       //        .environmentObject(todoListViewModel)
       //      MemoListView()
       //        .environmentObject(memoListViewModel)
-      VoiceRecorderView()
-//        .environmentObject(voiceRecorderViewModel)
+      //      VoiceRecorderView()
+      //        .environmentObject(voiceRecorderViewModel)
+      TimerView()
         .navigationDestination(
           for: PathType.self,
           destination: { pathType in
