@@ -149,7 +149,7 @@ private struct SelectDayView: View {
           .labelsHidden()
           .datePickerStyle(.graphical)
           .environment(\.locale, Locale(identifier: "ko"))
-          .frame(width: .infinity, alignment: .center)
+          .frame(maxWidth: .infinity, alignment: .center)
           .padding()
           .onChange(of: todoViewModel.day){
             todoViewModel.setDisplayCalendar(false)
