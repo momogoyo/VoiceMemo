@@ -17,15 +17,7 @@ struct OnboardingView: View {
   var body: some View {
     // MARK: - 화면 전환
     NavigationStack(path: $pathModel.paths) {
-      //      OnboardingContentView(onboardingViewModel: onboardingViewModel)
-      //      TodoListView()
-      //        .environmentObject(todoListViewModel)
-      //      MemoListView()
-      //        .environmentObject(memoListViewModel)
-      //      VoiceRecorderView()
-      //        .environmentObject(voiceRecorderViewModel)
-//      TimerView()
-      SettingsView()
+      OnboardingContentView(onboardingViewModel: onboardingViewModel)
         .navigationDestination(
           for: PathType.self,
           destination: { pathType in
@@ -33,6 +25,8 @@ struct OnboardingView: View {
             case .homeView:
               HomeView()
                 .navigationBarBackButtonHidden()
+                .environmentObject(todoListViewModel)
+                .environmentObject(memoListViewModel)
             case .todoView:
               TodoView()
                 .navigationBarBackButtonHidden()
@@ -149,7 +143,7 @@ private struct StartButtonView: View {
   fileprivate var body: some View {
     Button (
       action: {
-        pathModel.paths.append(.todoView)
+        pathModel.paths.append(.homeView)
         print(pathModel.paths)
       },
       label: {

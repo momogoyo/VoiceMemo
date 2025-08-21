@@ -10,6 +10,7 @@ import SwiftUI
 struct TodoListView: View {
   @EnvironmentObject private var pathModel: PathModel
   @EnvironmentObject private var todoListViewModel: TodoListViewModel
+  @EnvironmentObject private var homeViewModel: HomeViewModel
   
   var body: some View {
     ZStack {
@@ -50,6 +51,9 @@ struct TodoListView: View {
         todoListViewModel.removeButtonTapped()
       }
       Button("취소", role: .cancel) { }
+    }
+    .onChange(of: todoListViewModel.todos) { _, todos in
+      homeViewModel.setTodosCount(todos.count)
     }
   }
 }
@@ -105,7 +109,7 @@ struct TodoListContentView: View {
       ScrollView(.vertical) {
         VStack {
           CustomDividerView(.customGray0)
-        
+          
           ForEach(todoListViewModel.todos, id: \.self) { todo in
             // TODO: - Todo 셀 뷰
             TodoListCellView(todo: todo)

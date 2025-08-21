@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+enum Tab: Hashable {
+  case todoList
+  case memo
+  case voiceRecorder
+  case timer
+  case settings
+}
