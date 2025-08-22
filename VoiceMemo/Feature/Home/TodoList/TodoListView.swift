@@ -13,36 +13,71 @@ struct TodoListView: View {
   @EnvironmentObject private var homeViewModel: HomeViewModel
   
   var body: some View {
-    ZStack {
-      VStack {
-        if !todoListViewModel.todos.isEmpty {
-          CustomNavigationBar(
-            isDisplayLeftButton: false,
-            rightButtonAction: {
-              todoListViewModel.navigationRightButtonTapped()
-            },
-            rightButtonType: todoListViewModel.navigationBarRightButtonMode
-          )
-        } else {
-          Spacer()
-            .frame(height: 30)
-        }
-        
-        TitleView()
-          .padding(.top, 20)
-        
-        if todoListViewModel.todos.isEmpty {
-          AnnouncementView()
-        } else {
-          TodoListContentView()
+//    ZStack {
+    WriteBtnView(
+      content: {
+        VStack {
+          if !todoListViewModel.todos.isEmpty {
+            CustomNavigationBar(
+              isDisplayLeftButton: false,
+              rightButtonAction: {
+                todoListViewModel.navigationRightButtonTapped()
+              },
+              rightButtonType: todoListViewModel.navigationBarRightButtonMode
+            )
+          } else {
+            Spacer()
+              .frame(height: 30)
+          }
+          
+          TitleView()
             .padding(.top, 20)
+          
+          if todoListViewModel.todos.isEmpty {
+            AnnouncementView()
+          } else {
+            TodoListContentView()
+              .padding(.top, 20)
+          }
         }
-        
-        WriteTodoButtonView()
-          .padding(.trailing, 20)
-          .padding(.bottom, 50)
+      },
+      action: {
+        pathModel.paths.append(.todoView)
       }
-    }
+    )
+//      VStack {
+//        if !todoListViewModel.todos.isEmpty {
+//          CustomNavigationBar(
+//            isDisplayLeftButton: false,
+//            rightButtonAction: {
+//              todoListViewModel.navigationRightButtonTapped()
+//            },
+//            rightButtonType: todoListViewModel.navigationBarRightButtonMode
+//          )
+//        } else {
+//          Spacer()
+//            .frame(height: 30)
+//        }
+//        
+//        TitleView()
+//          .padding(.top, 20)
+//        
+//        if todoListViewModel.todos.isEmpty {
+//          AnnouncementView()
+//        } else {
+//          TodoListContentView()
+//            .padding(.top, 20)
+//        }
+        
+//        WriteTodoButtonView()
+//          .padding(.trailing, 20)
+//          .padding(.bottom, 50)
+//      }
+//      .modifier(WriteButtonViewModifier(action: { pathModel.paths.append(.todoView) }))
+//      .writeButton(action: {
+//        pathModel.paths.append(.todoView)
+//      })
+//    }
     .alert(
       "To do list \(todoListViewModel.removeTodos.count)개 삭제하시겠습니까?",
       isPresented: $todoListViewModel.isDisplayRemoveTodoAlert
@@ -81,16 +116,19 @@ private struct TitleView: View {
 private struct AnnouncementView: View {
   var body: some View {
     VStack(spacing: 15) {
+      Rectangle()
+        .fill(Color.customCoolGray)
+        .frame(height: 1)
+      
       Spacer()
+        .frame(height: 180)
       
       Image("pencil")
         .renderingMode(.template)
+      Text("현재 등록된 음성메모가 없습니다.")
+      Text("하단의 녹음 버튼을 눌러 음성메모를 시작해주세요.")
       
-      VStack(spacing: 8) {
-        Text(" \"매일 아침 8시 운동가라고 알려줘\" ")
-        Text(" \"내일 8시 수강 신청하라고 알려줘\" ")
-        Text("\"1시 반 점심약속 리마인드 해줘\" ")
-      }
+      Spacer()
     }
     .font(.system(size: 16))
     .foregroundColor(.customGray2)
