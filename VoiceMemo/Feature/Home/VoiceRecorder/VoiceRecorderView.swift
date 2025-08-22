@@ -303,6 +303,9 @@ private struct RecordButton: View {
                     isAnimation.toggle()
                   }
                 }
+                .onDisappear {
+                  isAnimation = false
+                }
             } else {
               Image("mic")
             }
